@@ -3,7 +3,7 @@ function loan(v,{label,rate,years,fee=0,addFee=false,erc=0,other=0,extra=0,lump=
   const principal=v.balance+(addFee?fee:0), up=(addFee?0:fee)+erc+other+lump;
   const m=mortgage({principal,rate,years,months:v.months,extra,lump,changes});
   const full=mortgage({principal,rate,years,months:Math.round(years*12),extra,lump,changes});
-  return {label,monthly:m.initialPayment+extra,upfront:up,cash:up+m.paid-Math.min(lump,principal)+m.fees,cost:m.interest+fee+erc+other+m.fees,interest:m.interest,balance:m.balance,fullCost:full.interest+fee+erc+other+full.fees,payoff:full.payoff,rows:m.rows.map(r=>({...r,cost:r.interest+fee+erc+other+r.fees})),full};
+  return {label,monthly:m.rows[1]?.payment||0,budget:m.initialPayment+extra,upfront:up,cash:up+m.paid-Math.min(lump,principal)+m.fees,cost:m.interest+fee+erc+other+m.fees,interest:m.interest,balance:m.balance,fullCost:full.interest+fee+erc+other+full.fees,payoff:full.payoff,rows:m.rows.map(r=>({...r,cost:r.interest+fee+erc+other+r.fees})),full};
 }
 export function compareMortgage(tool,v,{sensitivity=true}={}){
   let a,b,notes=[];const kind=tool.kind;
@@ -14,9 +14,9 @@ export function compareMortgage(tool,v,{sensitivity=true}={}){
     // Equal cash budgets each month, including after either mortgage pays off.
     const initial=Math.max(a.upfront,b.upfront),r=Math.pow(1+v.savingsRate/100,1/12)-1;
     let sa=initial-a.upfront,sb=initial-b.upfront;
-    for(let i=1;i<=v.months;i++){const pa=a.rows[i].payment,pb=b.rows[i].payment,budget=Math.max(a.monthly,b.monthly);sa=sa*(1+r)+budget-pa;sb=sb*(1+r)+budget-pb;}
+    for(let i=1;i<=v.months;i++){const pa=a.rows[i].payment,pb=b.rows[i].payment,budget=Math.max(a.budget,b.budget);sa=sa*(1+r)+budget-pa;sb=sb*(1+r)+budget-pb;}
     a.savings=sa;b.savings=sb;
-    const equalBudget=initial+Math.max(a.monthly,b.monthly)*v.months;
+    const equalBudget=initial+Math.max(a.budget,b.budget)*v.months;
     a.cost=equalBudget-sa+a.balance-v.balance;b.cost=equalBudget-sb+b.balance-v.balance;
     notes.push('Both options receive the same starting cash and monthly budget. Unspent cash earns your after-tax savings rate, including payments freed after repayment. The comparison includes savings interest; the lifetime interest row does not.');
   }else if(kind==='fix'){
@@ -77,8 +77,9 @@ export function compareMoving(tool,v){
     a=option(tool.a,v.currentValue+v.valueAdded,v.balance+work,0,v.currentRunning);
     const principal=Math.max(0,v.targetValue-equity-v.cash);
     b=option(tool.b,v.targetValue,principal,fees+v.cash,v.newRunning);
+    b.released=Math.max(0,equity-v.targetValue);
     if(v.cash>Math.max(0,v.targetValue-equity))throw new RangeError('Extra moving deposit exceeds the amount needed.');
-    notes.push('Building work, including contingency, is fully mortgage-financed in Option A. The value added is entered separately from its cost. Fees and any extra moving deposit are paid in cash. No temporary accommodation costs are included unless added to the works budget.');
+    notes.push('Building work, including contingency, is fully mortgage-financed in Option A. The value added is entered separately from its cost. Fees and any extra moving deposit are paid in cash. Any equity left after buying the replacement home remains in savings. No temporary accommodation costs are included unless added to the works budget.');
   }else{
     a=option(tool.a,v.currentValue,v.balance,0,v.currentRunning);
     b=option(tool.b,v.targetValue,Math.max(0,v.targetValue-equity),fees,v.newRunning);

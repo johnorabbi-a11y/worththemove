@@ -13,7 +13,9 @@ export function mortgage({principal,rate,years,months=Math.round(years*12),extra
     const change=changes.find(c=>c.month===m);
     if(change && balance>0){currentRate=change.rate;fees+=change.fee||0;regular=payment(balance,currentRate,Math.max(1,Math.round(years*12)-m+1)/12);}
     const charge=balance*currentRate/1200;
-    const actual=Math.min(balance+charge,regular+extra);
+    // Settle the final instalment exactly; repeated floating-point arithmetic
+    // can otherwise leave a tiny residual on long, high-rate repayment loans.
+    const actual=m===Math.round(years*12)?balance+charge:Math.min(balance+charge,regular+extra);
     balance=Math.max(0,balance+charge-actual); if(balance<1e-7)balance=0;
     interest+=charge;paid+=actual;
     if(balance===0&&payoff===null)payoff=m;
