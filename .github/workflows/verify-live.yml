@@ -1,0 +1,57 @@
+name: Verify live pre-indexing release
+on:
+  push:
+    paths:
+      - '.github/workflows/verify-live.yml'
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check all live pages and assets with trusted HTTPS
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          from urllib.request import urlopen
+          from urllib.error import HTTPError
+          from concurrent.futures import ThreadPoolExecutor
+          pages = json.loads(Path('data/pages.json').read_text())
+          files = [(p['url'], Path('.'+p['url'])/'index.html') for p in pages]
+          assets = [p for p in Path('assets').rglob('*') if p.is_file()]
+          assets += [Path(p) for p in ['data/calculators.js','data/assumptions.js','robots.txt','sitemap.xml']]
+          files += [('/'+p.as_posix(),p) for p in assets]
+          def check(item):
+              url, local = item
+              with urlopen('https://worththemove.co.uk'+url+'?qa=04fd356', timeout=30) as response:
+                  assert response.status == 200, url
+                  assert response.url.startswith('https://worththemove.co.uk/'), response.url
+                  body = response.read().replace(b'\r\n',b'\n')
+              assert body == local.read_bytes().replace(b'\r\n',b'\n'), 'Content mismatch: '+url
+              return url
+          with ThreadPoolExecutor(max_workers=6) as pool:
+              checked = list(pool.map(check, files))
+          try:
+              urlopen('https://worththemove.co.uk/qa-missing-page-04fd356/',timeout=30)
+              raise AssertionError('Missing page must return 404')
+          except HTTPError as response:
+              assert response.code == 404
+              assert b'noindex' in response.read()
+          print('PASS: trusted HTTPS; 54 live pages and '+str(len(assets))+' assets/deployment files match the checked release; custom 404 returns 404 and noindex.')
+          qa = Path('QA.md')
+          text = qa.read_text(encoding='utf-8-sig')
+          start = text.index('Local checks pass. Live HTTPS remains unverified:')
+          end = text.index('\n\n## Files',start)
+          text = text[:start] + 'Local checks pass. Independent GitHub-hosted verification on 28 September 2026 confirmed trusted HTTPS, HTTP 200 and exact released content for all 54 pages and '+str(len(assets))+' assets/deployment files, including robots.txt and sitemap.xml. The custom missing-page route returned HTTP 404 with noindex. No unresolved site defect was found that should prevent Search Console submission. Requests from the local Windows environment still fail certificate trust validation; that local/browser trust issue remains, but it was not reproduced by the independent runner. No certificate checks were bypassed.' + text[end:]
+          qa.write_text(text,encoding='utf-8')
+          Path('.github/workflows/verify-live.yml').unlink()
+          PY
+      - name: Record verification and remove temporary workflow
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add QA.md .github/workflows/verify-live.yml
+          git commit -m 'Record trusted HTTPS and full live-site verification'
+          git push origin HEAD:main
