@@ -25,6 +25,9 @@ jobs:
                   p = pathlib.PurePosixPath(entry.filename)
                   assert not p.is_absolute() and '..' not in p.parts and '.git' not in p.parts
               z.extractall('.')
+              for entry in z.infolist():
+                  if not entry.is_dir():
+                      pathlib.Path(entry.filename).write_bytes(z.read(entry).replace(b'\r\n', b'\n'))
           archive.unlink()
           pathlib.Path('.github/workflows/import-v1.yml').unlink()
           PY
