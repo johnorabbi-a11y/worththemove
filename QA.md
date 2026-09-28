@@ -24,7 +24,7 @@
 
 ## Search Console readiness
 
-Local checks pass. Live HTTPS remains unverified: the domain fails certificate trust validation (SEC_E_UNTRUSTED_ROOT; browser previously ERR_CERT_AUTHORITY_INVALID). DNS and Pages deployment had passed, HTTPS enforcement is enabled, and certificate reprovisioning was requested in the previous deployment task. Hold sitemap submission until trusted HTTPS and live page/sitemap responses can be verified. Certificate checks were not bypassed; this finding does not establish whether every visitor is affected.
+Local checks pass. Independent GitHub-hosted verification on 28 September 2026 confirmed trusted HTTPS, HTTP 200 and exact released content for all 54 pages and 11 assets/deployment files, including robots.txt and sitemap.xml. The custom missing-page route returned HTTP 404 with noindex. No unresolved site defect was found that should prevent Search Console submission. Requests from the local Windows environment still fail certificate trust validation; that local/browser trust issue remains, but it was not reproduced by the independent runner. No certificate checks were bypassed.
 
 ## Files and reproducibility
 
