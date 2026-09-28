@@ -1,0 +1,272 @@
+[
+  {
+    "url": "/",
+    "title": "Home decisions, compared with your numbers",
+    "description": "Compare UK mortgages, deposits, renting, buying and moving. See monthly payments, upfront costs, interest and equity side by side."
+  },
+  {
+    "url": "/mortgage/",
+    "title": "Mortgage decisions",
+    "description": "Compare rates, fees, terms and overpayments. Keep both the monthly budget and the debt left at the end in view."
+  },
+  {
+    "url": "/buying/",
+    "title": "Buying a home",
+    "description": "Compare the cash needed to buy with the long-term cost of owning. Explore deposit choices and renting on equal budgets."
+  },
+  {
+    "url": "/moving/",
+    "title": "Moving or improving",
+    "description": "Start with your existing equity. Compare transaction costs, borrowing, building work and what you may own afterwards."
+  },
+  {
+    "url": "/calculators/",
+    "title": "Find your comparison",
+    "description": "Sixteen tools for UK home and property decisions. Choose a question, replace the illustrative figures and compare both paths."
+  },
+  {
+    "url": "/guides/",
+    "title": "Understand the numbers",
+    "description": "Practical explanations of the costs, assumptions and trade-offs behind a home decision."
+  },
+  {
+    "url": "/scenarios/",
+    "title": "Real numbers. Worked through.",
+    "description": "Eight focused illustrations show how a change in fees, rates, terms or deposits can alter a comparison."
+  },
+  {
+    "url": "/mortgage/remortgage-or-stay/",
+    "title": "Remortgage or stay calculator",
+    "description": "Compare the interest saved by switching with the fees you pay to get there."
+  },
+  {
+    "url": "/mortgage/remortgage-break-even/",
+    "title": "Remortgage break-even calculator",
+    "description": "Find the first month a lower rate offsets the cost of switching."
+  },
+  {
+    "url": "/mortgage/mortgage-fee-vs-no-fee/",
+    "title": "Mortgage fee vs no fee calculator",
+    "description": "See whether a lower mortgage rate earns back its product fee."
+  },
+  {
+    "url": "/mortgage/two-year-vs-five-year-fix/",
+    "title": "2-year vs 5-year fix calculator",
+    "description": "Model five years of costs, including an explicit rate and fee after the shorter fix ends."
+  },
+  {
+    "url": "/mortgage/25-vs-30-year-mortgage/",
+    "title": "25-year vs 30-year mortgage calculator",
+    "description": "Compare monthly breathing room with the extra interest and debt left behind."
+  },
+  {
+    "url": "/mortgage/25-vs-35-year-mortgage/",
+    "title": "25-year vs 35-year mortgage calculator",
+    "description": "Measure the monthly reduction, extra lifetime interest and remaining balance."
+  },
+  {
+    "url": "/mortgage/30-vs-35-year-mortgage/",
+    "title": "30-year vs 35-year mortgage calculator",
+    "description": "See what another five years does to payments and interest."
+  },
+  {
+    "url": "/mortgage/mortgage-overpayment/",
+    "title": "Mortgage overpayment calculator",
+    "description": "Compare saving spare cash with using the same monthly budget to reduce mortgage debt."
+  },
+  {
+    "url": "/mortgage/lump-sum-vs-monthly-overpayment/",
+    "title": "Lump sum vs monthly overpayment calculator",
+    "description": "Compare payment timing with equal starting cash and equal monthly budgets."
+  },
+  {
+    "url": "/mortgage/early-repayment-charge-vs-switching/",
+    "title": "Early repayment charge vs switching calculator",
+    "description": "Test whether interest savings repay a quoted early repayment charge and switching costs."
+  },
+  {
+    "url": "/buying/rent-vs-buy/",
+    "title": "Rent vs buy calculator",
+    "description": "Compare equal cash budgets, ownership costs, rent and estimated equity."
+  },
+  {
+    "url": "/buying/five-vs-ten-percent-deposit/",
+    "title": "5% vs 10% deposit calculator",
+    "description": "Compare borrowing costs and the cash tied up in a larger deposit."
+  },
+  {
+    "url": "/buying/ten-vs-twenty-percent-deposit/",
+    "title": "10% vs 20% deposit calculator",
+    "description": "See how a larger cash commitment changes interest, payments and equity."
+  },
+  {
+    "url": "/buying/true-cost-of-buying/",
+    "title": "True cost of buying a home calculator",
+    "description": "Compare two purchase budgets, including deposits, tax, fees, borrowing and ongoing costs."
+  },
+  {
+    "url": "/moving/move-vs-extend/",
+    "title": "Move vs extend calculator",
+    "description": "Compare financed building work with the transaction and borrowing costs of moving."
+  },
+  {
+    "url": "/moving/downsizing/",
+    "title": "Is downsizing worth it? calculator",
+    "description": "See the equity released after buying a smaller home, alongside moving and running costs."
+  },
+  {
+    "url": "/guides/how-mortgage-interest-works/",
+    "title": "How mortgage interest actually works",
+    "description": "A repayment mortgage pays both interest and principal. The split changes even when the payment stays the same."
+  },
+  {
+    "url": "/guides/mortgage-product-fees/",
+    "title": "How product fees change the real mortgage cost",
+    "description": "A cheaper rate can come with a larger fixed cost. The balance and the time you keep the deal determine whether it pays back."
+  },
+  {
+    "url": "/guides/mortgage-break-even-explained/",
+    "title": "What mortgage break-even means",
+    "description": "Break-even is a crossing between two cost paths. Define the costs before relying on the date."
+  },
+  {
+    "url": "/guides/early-repayment-charges/",
+    "title": "How early repayment charges work",
+    "description": "An early repayment charge can change the economics of switching even when the new rate is lower."
+  },
+  {
+    "url": "/guides/mortgage-overpayments-and-interest/",
+    "title": "How mortgage overpayments affect interest",
+    "description": "Overpayments reduce principal sooner. Keeping the ordinary payment unchanged can shorten the mortgage."
+  },
+  {
+    "url": "/guides/choosing-a-mortgage-term/",
+    "title": "Should you choose a shorter mortgage term?",
+    "description": "A shorter term increases the required payment and usually reduces interest under the same rate."
+  },
+  {
+    "url": "/guides/forgotten-moving-costs/",
+    "title": "Costs people forget when moving house",
+    "description": "A price gap is only part of a moving budget. Selling, buying and the overlap between homes create separate bills."
+  },
+  {
+    "url": "/guides/forgotten-homebuying-costs/",
+    "title": "Costs people forget when buying a home",
+    "description": "The deposit is only one part of the cash required. Build a budget for completion and for the first year."
+  },
+  {
+    "url": "/guides/deposit-size-and-mortgages/",
+    "title": "How deposit size affects a mortgage",
+    "description": "A larger deposit reduces borrowing. A rate reduction may provide a second benefit, but it needs a real quote."
+  },
+  {
+    "url": "/guides/understanding-loan-to-value/",
+    "title": "Understanding loan-to-value",
+    "description": "Loan-to-value expresses the mortgage as a percentage of the property value used by the lender."
+  },
+  {
+    "url": "/guides/compare-mortgage-deals/",
+    "title": "How to compare mortgage deals properly",
+    "description": "Keep the starting balance, time horizon and repayment basis consistent before comparing rates."
+  },
+  {
+    "url": "/guides/when-a-fixed-mortgage-ends/",
+    "title": "What happens when a fixed mortgage ends?",
+    "description": "The fixed rate has an end date; the mortgage balance usually has many more years to run."
+  },
+  {
+    "url": "/guides/estimating-extension-costs/",
+    "title": "How to estimate the cost of extending a house",
+    "description": "An extension budget needs a scope, quotes and a contingency before a financial comparison becomes meaningful."
+  },
+  {
+    "url": "/guides/moving-versus-renovating/",
+    "title": "How to compare moving with improving your home",
+    "description": "Both routes can buy a better living arrangement, but the financial paths and practical trade-offs differ."
+  },
+  {
+    "url": "/guides/downsizing-costs/",
+    "title": "What costs are involved in downsizing?",
+    "description": "A cheaper replacement home may release equity, but the amount available is lower than the headline price gap."
+  },
+  {
+    "url": "/scenarios/999-mortgage-fee/",
+    "title": "Is a £999 mortgage fee worth it?",
+    "description": "A two-year deal gives a fixed fee little time to repay itself. Compare a smaller balance too: the fee stays £999 while the interest saving shrinks."
+  },
+  {
+    "url": "/scenarios/1499-mortgage-fee/",
+    "title": "When does a £1,499 mortgage fee pay back?",
+    "description": "A higher fee on a smaller balance is a useful stress test. The rate gap alone does not tell you whether this product earns its fee within two years."
+  },
+  {
+    "url": "/scenarios/four-vs-five-percent/",
+    "title": "4% vs 5% on a £200,000 mortgage",
+    "description": "This isolates a one-percentage-point rate difference with no switching fees. Add an actual fee or ERC before using it to assess a real remortgage."
+  },
+  {
+    "url": "/scenarios/200000-mortgage-25-vs-30/",
+    "title": "£200,000 mortgage: 25 vs 30 years",
+    "description": "Five extra years reduce the contractual payment but leave more debt after five years. The balance row measures the part of the payment reduction that has simply been postponed."
+  },
+  {
+    "url": "/scenarios/250000-mortgage-25-vs-35/",
+    "title": "£250,000 mortgage: 25 vs 35 years",
+    "description": "A ten-year extension has a visible monthly benefit and a long interest tail. Compare the full-term figure with the shorter five-year debt snapshot rather than treating either alone as the answer."
+  },
+  {
+    "url": "/scenarios/200-monthly-overpayment/",
+    "title": "What does a £200 monthly overpayment change?",
+    "description": "The comparison gives the saver the same £200 each month. Mortgage interest avoided and savings interest earned are both counted, while access to the cash remains a separate consideration."
+  },
+  {
+    "url": "/scenarios/500-monthly-overpayment/",
+    "title": "A £500 monthly overpayment versus saving",
+    "description": "A ten-year view makes the compounding effect visible. Check the lender’s allowance before assuming that £6,000 of extra payments each year is penalty-free."
+  },
+  {
+    "url": "/scenarios/200000-home-five-vs-ten-deposit/",
+    "title": "5% vs 10% deposit on a £200,000 home",
+    "description": "The extra £10,000 reduces borrowing and changes the assumed rate. This is a same-day choice: it excludes the rent and price changes involved in waiting to save. Property tax is excluded from this illustration and must be entered for a real purchase."
+  },
+  {
+    "url": "/about/",
+    "title": "About Worth The Move",
+    "description": "A transparent way to compare the financial consequences of home decisions."
+  },
+  {
+    "url": "/methodology/",
+    "title": "Calculation methodology",
+    "description": "How the repayment engine, equal-budget comparisons and cost measures work."
+  },
+  {
+    "url": "/editorial-policy/",
+    "title": "Editorial policy",
+    "description": "Clear assumptions, traceable sources and corrections without invented expertise."
+  },
+  {
+    "url": "/sources/",
+    "title": "Sources and current figures",
+    "description": "Official routes for purchase tax and background information on mortgage comparisons."
+  },
+  {
+    "url": "/contact/",
+    "title": "Contact and corrections",
+    "description": "Report a calculation issue or suggest a clearer explanation."
+  },
+  {
+    "url": "/privacy/",
+    "title": "Privacy",
+    "description": "How this static website handles calculator inputs and visits."
+  },
+  {
+    "url": "/terms/",
+    "title": "Terms of use",
+    "description": "Use the comparisons as estimates, with responsibility for checking your own inputs."
+  },
+  {
+    "url": "/disclaimer/",
+    "title": "Financial information disclaimer",
+    "description": "The limits of these tools and the meaning of a cheaper modelled result."
+  }
+]

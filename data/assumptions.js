@@ -1,0 +1,3 @@
+// Illustrative inputs, not live mortgage quotes or market forecasts.
+export const assumptions = Object.freeze({balance:200000,rateA:5,rateB:4.5,termA:25,termB:25,months:60,feeA:0,feeB:999,erc:0,other:0,addFee:0,extra:200,lump:12000,savingsRate:3,resetRate:5,resetFee:999,price:250000,depositA:10,depositB:20,rent:1100,rentGrowth:2,houseGrowth:0,maintenance:200,legal:1500,survey:600,removals:800,tax:0,saleFee:1.5,currentValue:300000,targetValue:400000,works:60000,contingency:15,valueAdded:40000,currentRunning:300,newRunning:250,cash:0});
+export const policy = {domain:'https://worththemove.co.uk',date:'2026-09-28',commercialEnabled:false,trackingEnabled:false};

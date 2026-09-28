@@ -1,0 +1,22 @@
+export const gbp=v=>new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',maximumFractionDigits:0}).format(Math.abs(v)<.5?0:v);
+export const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const signed=v=>`${v<0?'−':'+'}${gbp(Math.abs(v))}`;
+export function report(r,tool,{example=false}={}){
+ const {a,b}=r,d=a.cost-b.cost;
+ const rows=[['Initial monthly outgoings',a.monthly,b.monthly],['Cash needed upfront',a.upfront,b.upfront],['Cash paid over period',a.cash,b.cash],[r.metric,a.cost,b.cost],['Mortgage interest over period',a.interest,b.interest],['Mortgage left at end',a.balance,b.balance]];
+ if(a.equity!==undefined)rows.push(['Estimated home equity',a.equity,b.equity]);
+ if(a.savings!==undefined||b.savings!==undefined)rows.push(['Cash / savings at end',a.savings||0,b.savings||0]);
+ if(a.wealth!==undefined)rows.push(['Total equity and savings',a.wealth,b.wealth]);
+ if(b.released!==undefined)rows.push(['Equity released before fees',0,b.released]);
+ if(tool.kind==='term'||['overpay','lump'].includes(tool.kind))rows.push(['Full-term mortgage interest',a.fullCost,b.fullCost]);
+ const outcome=Math.abs(d)<.5?'The modelled costs are equal.':`${d>0?b.label:a.label} has ${gbp(Math.abs(d))} lower ${r.metric.toLowerCase()}.`;
+ let threshold=r.threshold===null?'Change the rates, costs and period to test how robust this result is.':r.thresholdType==='reset'?`The two paths have equal five-year financing costs at an assumed reset rate of approximately ${r.threshold.toFixed(2)}%. Above that reset rate, the five-year path has lower modelled costs.`:`The cost paths are equal at a starting mortgage balance of approximately ${gbp(r.threshold)}, with the other inputs unchanged. Test nearby balances to see which side costs less.`;
+ let breakeven=r.cross?(r.cross.first===null?`Option B does not become cheaper within ${r.months} months.`:`Option B first becomes cheaper in month ${r.cross.first}.${r.cross.reverses?' This advantage reverses later in the period.':''}`):'A single payback date would hide the changing cash and equity position. Compare both ending balances instead.';
+ const payoff=['term','overpay','lump'].includes(tool.kind)?`<p>Estimated repayment time: <strong>${escape(a.label)}: ${a.payoff} months</strong>; <strong>${escape(b.label)}: ${b.payoff} months</strong>. Full-term figures hold the entered rate constant and exclude savings interest.</p>`:'';
+ return `<div class="result-heading"><span class="eyebrow">${example?'Worked example':'Your comparison'} · ${r.months} months</span><h2>${example?'The numbers, side by side':'Here’s the difference'}</h2><p>Based on the figures ${example?'in this illustration':'entered'}. Estimates, not a recommendation.</p></div>
+ <div class="option-grid"><section class="option option-a"><span class="option-tag">A</span><h3>${escape(a.label)}</h3><p class="big-number">${gbp(a.monthly)}<small> / month initially</small></p><p>${gbp(a.upfront)} cash upfront</p></section><section class="option option-b"><span class="option-tag">B</span><h3>${escape(b.label)}</h3><p class="big-number">${gbp(b.monthly)}<small> / month initially</small></p><p>${gbp(b.upfront)} cash upfront</p></section></div>
+ <section class="difference"><span class="eyebrow">The difference</span><h3>${escape(outcome)}</h3><p>Option B minus Option A: <strong>${signed(b.monthly-a.monthly)} a month initially</strong> and <strong>${signed(b.upfront-a.upfront)} upfront</strong>.</p><p>${escape(breakeven)}</p></section>
+ <div class="table-wrap" role="region" aria-label="Detailed financial comparison" tabindex="0"><table><caption>Comparison over ${r.months} months · amounts rounded to the nearest pound</caption><thead><tr><th scope="col">Measure</th><th scope="col">A · ${escape(a.label)}</th><th scope="col">B · ${escape(b.label)}</th></tr></thead><tbody>${rows.map(([label,x,y])=>`<tr><th scope="row">${label}</th><td>${gbp(x)}</td><td>${gbp(y)}</td></tr>`).join('')}</tbody></table></div>
+ <p class="small">Cash paid includes principal repayments, which build equity. ${r.metric} excludes principal as an expense. A negative net cost represents modelled asset growth or savings interest exceeding costs; it is not guaranteed income. Upfront figures exclude future fees.</p>${payoff}
+ <details class="assumptions" open><summary>What would change the result?</summary><p>${escape(threshold)}</p>${r.notes.map(n=>`<p>${escape(n)}</p>`).join('')}<p>${escape(tool.mistake)}</p></details>`;
+}

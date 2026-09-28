@@ -1,0 +1,34 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {payment,mortgage,savings,crossing,root} from '../assets/js/engine.js';
+import {calculate} from '../assets/js/compare.js';
+import {calculators,bySlug} from '../data/calculators.js';
+const near=(a,b,tol=.01)=>assert.ok(Math.abs(a-b)<tol,`${a} differs from ${b}`);
+test('known £200,000, 5%, 25-year payment',()=>near(payment(200000,5,25),1169.180083,.0001));
+test('independent £200,000, 5%, 20-year reference',()=>{const m=mortgage({principal:200000,rate:5,years:20});near(m.paid,316778.75,1);near(m.initialPayment,1319.91148,.001);});
+test('zero interest and zero principal',()=>{near(payment(120000,0,10),1000);near(payment(0,5,25),0);const m=mortgage({principal:120000,rate:0,years:10});near(m.balance,0);near(m.interest,0);near(m.paid,120000);});
+test('amortisation conserves principal at each month',()=>{const m=mortgage({principal:234567,rate:4.37,years:27,months:324});for(const row of m.rows)near(row.paid-row.interest+row.balance,234567,.00001);near(m.balance,0,.00001);});
+test('closed-form balance matches schedule',()=>{const p=200000,r=.05/12,n=60,pay=payment(p,5,25),expected=p*(1+r)**n-pay*((1+r)**n-1)/r;near(mortgage({principal:p,rate:5,years:25,months:n}).balance,expected,.00001);});
+test('loan cannot receive payments after payoff',()=>{const m=mortgage({principal:1000,rate:0,years:1,months:24,extra:10000});assert.equal(m.payoff,1);assert.equal(m.rows[2].payment,0);near(m.paid,1000);});
+test('lump payoff at month zero',()=>{const m=mortgage({principal:1000,rate:5,years:25,lump:1000,months:12});near(m.balance,0);near(m.interest,0);assert.equal(m.payoff,0);});
+test('rate resets use remaining term and charge one fee',()=>{const m=mortgage({principal:200000,rate:4,years:25,months:60,changes:[{month:25,rate:6,fee:999}]});near(m.rows[25].payment,payment(m.rows[24].balance,6,23));assert.equal(m.fees,999);assert.equal(m.rows[24].fees,0);});
+test('invalid inputs rejected',()=>{for(const args of [[-1,5,25],[200000,-1,25],[200000,5,0],[NaN,5,25]])assert.throws(()=>payment(...args),RangeError);assert.throws(()=>mortgage({principal:100,rate:5,years:25,months:Infinity}));});
+test('savings zero and positive rate',()=>{near(savings(1000,100,0,12),2200);near(savings(1000,0,5,12),1050);});
+test('crossing signals later reversal',()=>{const r=crossing([{cost:0},{cost:10},{cost:0}],[{cost:5},{cost:5},{cost:5}]);assert.equal(r.first,1);assert.equal(r.reverses,true);});
+test('root finder handles absent or non-unique crossing',()=>{near(root(x=>x*x-4,0,10),2,.00001);assert.equal(root(x=>x+1,0,10),null);assert.equal(root(()=>0,0,10),null);});
+for(const tool of calculators){
+ test(`${tool.title}: finite default report`,()=>{const r=calculate(tool,tool.defaults);for(const o of [r.a,r.b])for(const k of ['monthly','upfront','cash','cost','interest','balance'])assert.ok(Number.isFinite(o[k]),`${tool.slug}: ${k}`);});
+ test(`${tool.title}: zero mortgage rate is stable`,()=>{const r=calculate(tool,{...tool.defaults,rateA:0,rateB:0,resetRate:0,savingsRate:0});near(r.a.interest,0);near(r.b.interest,0);});
+}
+test('fee added to loan counted once, incurs interest',()=>{const t=bySlug['mortgage-fee-vs-no-fee'],v={...t.defaults,rateA:5,rateB:5};const cash=calculate(t,v),financed=calculate(t,{...v,addFee:1});near(financed.b.upfront,0);assert.ok(financed.b.cost>cash.b.cost);near(financed.b.cost-financed.b.interest,v.feeB);});
+test('term tools do not charge hidden product fees',()=>{const t=bySlug['25-vs-35-year-mortgage'],r=calculate(t,t.defaults);near(r.b.upfront,0);near(r.b.cost,r.b.interest);assert.ok(r.b.monthly<r.a.monthly);assert.ok(r.b.fullCost>r.a.fullCost);assert.ok(r.b.balance>r.a.balance);});
+test('same mortgage and zero fees produce identical paths',()=>{const t=bySlug['remortgage-or-stay'];const r=calculate(t,{...t.defaults,rateB:t.defaults.rateA,feeB:0});near(r.a.cost,r.b.cost);near(r.a.balance,r.b.balance);});
+test('computed balance threshold actually equalises costs',()=>{const t=bySlug['mortgage-fee-vs-no-fee'],r=calculate(t,t.defaults);assert.ok(r.threshold>1000);const at=calculate(t,{...t.defaults,balance:r.threshold});near(at.a.cost,at.b.cost,.0001);});
+test('computed reset threshold equalises five-year costs',()=>{const t=bySlug['two-year-vs-five-year-fix'],r=calculate(t,t.defaults);assert.ok(r.threshold!==null);const at=calculate(t,{...t.defaults,resetRate:r.threshold});near(at.a.cost,at.b.cost,.0001);});
+test('extra payments shorten payoff and reduce mortgage interest',()=>{const t=bySlug['mortgage-overpayment'],r=calculate(t,t.defaults);assert.ok(r.b.payoff<r.a.payoff);assert.ok(r.b.interest<r.a.interest);assert.ok(r.a.savings>r.b.savings);});
+test('zero overpayment creates identical equal-budget cost',()=>{const t=bySlug['mortgage-overpayment'],r=calculate(t,{...t.defaults,extra:0});near(r.a.cost,r.b.cost);});
+test('rent vs buy equal budgets at 0 interest and no running costs',()=>{const t=bySlug['rent-vs-buy'],r=calculate(t,{...t.defaults,rateA:0,rent:1000,rentGrowth:0,houseGrowth:0,maintenance:0,tax:0,legal:0,survey:0,removals:0,savingsRate:0,months:60});near(r.a.cost,0);near(r.b.cost,60000);near(r.a.wealth-r.b.wealth,60000);});
+test('larger deposit builds no free wealth at zero rates',()=>{const t=bySlug['five-vs-ten-percent-deposit'],r=calculate(t,{...t.defaults,rateA:0,rateB:0,savingsRate:0,houseGrowth:0});near(r.a.cost,r.b.cost);near(r.b.upfront-r.a.upfront,12500);});
+test('property growth changes costs not cash mortgage payments',()=>{const t=bySlug['rent-vs-buy'],base=calculate(t,t.defaults),rise=calculate(t,{...t.defaults,houseGrowth:5});near(base.a.monthly,rise.a.monthly);assert.ok(rise.a.cost<base.a.cost);});
+test('downsizing release is existing equity, not a profit',()=>{const t=bySlug['downsizing'],r=calculate(t,{...t.defaults,rateA:0,savingsRate:0,currentRunning:0,newRunning:0,houseGrowth:0,saleFee:0,legal:0,survey:0,removals:0,tax:0});near(r.b.released,30000);near(r.a.cost,0);near(r.b.cost,0);});
+test('extension cost less value uplift is correctly recognised',()=>{const t=bySlug['move-vs-extend'],r=calculate(t,{...t.defaults,rateA:0,savingsRate:0,currentRunning:0,newRunning:0,houseGrowth:0,works:50000,contingency:0,valueAdded:40000});near(r.a.cost,10000);});
+test('mortgage cost period beyond payoff stays finite',()=>{const t=bySlug['mortgage-overpayment'],r=calculate(t,{...t.defaults,termA:1,months:480});assert.equal(r.a.balance,0);assert.equal(r.b.balance,0);assert.ok(Number.isFinite(r.a.savings));});

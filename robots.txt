@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://worththemove.co.uk/sitemap.xml
